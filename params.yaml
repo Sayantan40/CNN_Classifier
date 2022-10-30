@@ -1,1 +1,9 @@
-key: val
+AUGMENTATION: True ## AUGMENTATION used when we have insufficient number of datasets(images).
+                   #It adds multiple datas(images)bt applying some patterns.
+IMAGE_SIZE: [224, 224, 3] # as per VGG 16 model
+BATCH_SIZE: 16
+INCLUDE_TOP: False
+EPOCHS: 1
+CLASSES: 2
+WEIGHTS: imagenet  ##imagenet was having thousand number of classes.Thus having been learned a wide variations
+LEARNING_RATE: 0.01
