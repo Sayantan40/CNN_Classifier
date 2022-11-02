@@ -4,7 +4,7 @@ from DeepClassifier.entity.config_entity import DataIngestionConfig,PrepareBaseM
 from pathlib import Path
 import os
 
-## All the Configuration Information for Data Ingestion.
+## All the Configuration Information .
 class ConfigurationManager:
 
     
