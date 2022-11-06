@@ -1,0 +1,55 @@
+stages:
+  data_ingestion:
+    cmd: python src/DeepClassifier/pipeline/Stage_01_data_Ingestion.py
+    deps:
+      - src/DeepClassifier/pipeline/Stage_01_data_Ingestion.py
+      - configs/config.yaml
+    outs:
+      - artifacts/data_ingestion/PetImages
+
+
+  prepare_base_model:
+    cmd: python src/DeepClassifier/pipeline/Stage_02_Prepare_Base_Model.py
+    deps:
+      - src/DeepClassifier/pipeline/Stage_02_Prepare_Base_Model.py
+      - configs/config.yaml
+    params:
+      - IMAGE_SIZE
+      - INCLUDE_TOP
+      - CLASSES
+      - WEIGHTS
+      - LEARNING_RATE
+    outs:
+      - artifacts/prepare_base_model
+
+
+  training:
+    cmd: python src/DeepClassifier/pipeline/Stage_03_Training.py
+    deps:
+      - src/DeepClassifier/pipeline/Stage_03_Training.py
+      - src/DeepClassifier/components/prepare_callback.py
+      - configs/config.yaml
+      - artifacts/data_ingestion/PetImages
+      - artifacts/prepare_base_model
+    params:
+      - IMAGE_SIZE
+      - EPOCHS
+      - BATCH_SIZE
+      - AUGMENTATION
+    outs:
+      - artifacts/training/model.h5
+
+
+  evaluation:
+    cmd: python src/DeepClassifier/pipeline/Stage_04_Evaluation.py
+    deps:
+      - src/DeepClassifier/pipeline/Stage_04_Evaluation.py
+      - configs/config.yaml
+      - artifacts/data_ingestion/PetImages
+      - artifacts/training/model.h5
+    params:
+      - IMAGE_SIZE
+      - BATCH_SIZE
+    metrics:
+    - scores.json:
+        cache: false
